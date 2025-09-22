@@ -6,7 +6,10 @@ import projectSlice from "./projectSlice";
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem("dashboardState");
-    console.log("Loading from localStorage:", serializedState ? "Data found" : "No data");
+    console.log(
+      "Loading from localStorage:",
+      serializedState ? "Data found" : "No data"
+    );
 
     if (serializedState === null) {
       return undefined;
@@ -17,7 +20,7 @@ const loadState = () => {
       hasTasksObject: !!parsed.tasks,
       tasksCount: parsed.tasks ? Object.keys(parsed.tasks).length : 0,
       hasColumns: !!parsed.columns,
-      columnsCount: parsed.columns ? Object.keys(parsed.columns).length : 0
+      columnsCount: parsed.columns ? Object.keys(parsed.columns).length : 0,
     });
 
     // Validate the loaded state has required structure
@@ -44,7 +47,7 @@ const saveState = (state) => {
     localStorage.setItem("dashboardState", serializedState);
     console.log("State saved to localStorage:", {
       tasksCount: Object.keys(tasksState.tasks || {}).length,
-      columnsCount: Object.keys(tasksState.columns || {}).length
+      columnsCount: Object.keys(tasksState.columns || {}).length,
     });
   } catch (err) {
     console.error("Error saving state:", err);
