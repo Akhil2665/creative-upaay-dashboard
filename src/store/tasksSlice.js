@@ -11,7 +11,7 @@ const sampleTasks = {
     priority: "high",
     category: "design",
     createdAt: "2025-09-20T10:00:00.000Z",
-    deadline: "2024-01-25T23:59:59.000Z",
+    deadline: "2025-09-25T23:59:59.000Z", // 3 days from current date
   },
   "task-2": {
     id: "task-2",
@@ -20,7 +20,7 @@ const sampleTasks = {
     priority: "high",
     category: "development",
     createdAt: "2025-09-20T09:30:00.000Z",
-    deadline: "2024-01-22T23:59:59.000Z",
+    deadline: "2025-09-22T18:00:00.000Z", // Due today
   },
   "task-3": {
     id: "task-3",
@@ -30,7 +30,7 @@ const sampleTasks = {
     priority: "medium",
     category: "documentation",
     createdAt: "2025-09-20T09:00:00.000Z",
-    deadline: "2024-01-30T23:59:59.000Z",
+    deadline: "2025-09-30T23:59:59.000Z", // Next week
   },
   "task-4": {
     id: "task-4",
@@ -40,7 +40,7 @@ const sampleTasks = {
     priority: "high",
     category: "bug-fix",
     createdAt: "2025-09-19T15:00:00.000Z",
-    deadline: "2024-01-20T23:59:59.000Z",
+    deadline: "2025-09-21T23:59:59.000Z", // Overdue by 1 day
   },
   "task-5": {
     id: "task-5",
@@ -49,7 +49,16 @@ const sampleTasks = {
     priority: "medium",
     category: "development",
     createdAt: "2025-09-19T14:00:00.000Z",
-    deadline: "2024-01-28T23:59:59.000Z",
+    deadline: "2025-09-28T23:59:59.000Z", // 6 days from now
+  },
+  "task-6": {
+    id: "task-6",
+    title: "Code Review",
+    description: "Review pull requests and provide feedback",
+    priority: "low",
+    category: "development",
+    createdAt: "2025-09-22T08:00:00.000Z",
+    // No deadline set
   },
 };
 
@@ -68,7 +77,7 @@ const initialState = {
     done: {
       id: "done",
       title: "Done",
-      taskIds: ["task-5"],
+      taskIds: ["task-5", "task-6"],
     },
   },
   tasks: sampleTasks,

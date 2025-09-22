@@ -6,11 +6,22 @@ import projectSlice from "./projectSlice";
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem("dashboardState");
+
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+
+    const parsed = JSON.parse(serializedState);
+
+    // Validate the loaded state has required structure
+    if (!parsed.tasks || !parsed.columns || !parsed.columnOrder) {
+      localStorage.removeItem("dashboardState");
+      return undefined;
+    }
+
+    return parsed;
   } catch (err) {
+    localStorage.removeItem("dashboardState");
     return undefined;
   }
 };

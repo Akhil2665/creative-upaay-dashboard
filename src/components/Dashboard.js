@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Collapse } from "@mui/material";
 import TaskColumn from "./TaskColumn";
 import AddTaskModal from "./AddTaskModal";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import PageHeader from "./PageHeader";
+import FilterBar from "./FilterBar";
 
 const Dashboard = ({ isDarkMode, toggleTheme }) => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState("todo");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [filterBarVisible, setFilterBarVisible] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -19,6 +21,13 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
   const { columns, columnOrder, tasks, filters } = useSelector(
     (state) => state.tasks
   );
+
+  // Check if there are active filters
+  const hasActiveFilters =
+    filters.priority !== "all" ||
+    filters.category !== "all" ||
+    filters.deadline !== "all" ||
+    (filters.searchText && filters.searchText.trim() !== "");
 
   // Filter tasks based on current filters
   const getFilteredTasks = (taskIds) => {
@@ -38,7 +47,12 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
         }
 
         // Deadline filter
-        if (filters.deadline !== "all" && task.deadline) {
+        if (filters.deadline !== "all") {
+          if (!task.deadline) {
+            // Task has no deadline - only show for "all" filter
+            return false;
+          }
+
           const now = new Date();
           const deadline = new Date(task.deadline);
           const diffMs = deadline - now;
@@ -49,7 +63,12 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
               if (diffMs > 0) return false;
               break;
             case "today":
-              if (days !== 0) return false;
+              // Check if deadline is today (same date, regardless of time)
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const taskDeadlineDate = new Date(deadline);
+              taskDeadlineDate.setHours(0, 0, 0, 0);
+              if (taskDeadlineDate.getTime() !== today.getTime()) return false;
               break;
             case "upcoming":
               if (days <= 0 || days > 7) return false;
@@ -60,8 +79,6 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
             default:
               break;
           }
-        } else if (filters.deadline === "has-deadline" && !task.deadline) {
-          return false;
         }
 
         // Search text filter
@@ -93,6 +110,10 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
 
   const handleSidebarCollapseChange = (collapsed) => {
     setSidebarCollapsed(collapsed);
+  };
+
+  const toggleFilterBar = () => {
+    setFilterBarVisible(!filterBarVisible);
   };
 
   // Auto-collapse sidebar on mobile and close on mobile
@@ -129,7 +150,18 @@ const Dashboard = ({ isDarkMode, toggleTheme }) => {
         <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
 
         {/* Page Header */}
-        <PageHeader />
+        <PageHeader
+          filterBarVisible={filterBarVisible}
+          onToggleFilterBar={toggleFilterBar}
+          hasActiveFilters={hasActiveFilters}
+        />
+
+        {/* Filter Controls */}
+        <Box sx={{ px: 2, pb: 1 }}>
+          <Collapse in={filterBarVisible}>
+            <FilterBar />
+          </Collapse>
+        </Box>
 
         {/* Main Content Area */}
         <Box sx={{ p: 2 }}>

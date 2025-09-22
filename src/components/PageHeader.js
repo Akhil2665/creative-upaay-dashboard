@@ -23,7 +23,11 @@ import {
 } from "@mui/icons-material";
 import { updateProjectName } from "../store/projectSlice";
 
-const PageHeader = () => {
+const PageHeader = ({
+  filterBarVisible,
+  onToggleFilterBar,
+  hasActiveFilters,
+}) => {
   const dispatch = useDispatch();
   const { currentProject } = useSelector((state) => state.project);
   const [isEditing, setIsEditing] = useState(false);
@@ -144,6 +148,29 @@ const PageHeader = () => {
 
         {/* Right Side - Team Avatars with Invite and Actions */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {/* Invite Button */}
+          <Button
+            variant="contained"
+            startIcon={<InviteIcon />}
+            size="small"
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "0.875rem",
+              bgcolor: "#8B5CF6",
+              color: "white",
+              px: 2,
+              py: 0.75,
+              borderRadius: 2,
+              boxShadow: "none",
+              "&:hover": {
+                bgcolor: "#7C3AED",
+                boxShadow: "none",
+              },
+            }}
+          >
+            Invite
+          </Button>
           {/* Team Avatars */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <AvatarGroup
@@ -192,31 +219,84 @@ const PageHeader = () => {
             />
           </Box>
 
-          {/* Invite Button */}
+          {/* Action Buttons */}
+        </Box>
+      </Box>
+
+      {/* Second Row - Filter and Today Buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Button
-            variant="contained"
-            startIcon={<InviteIcon />}
+            variant={hasActiveFilters ? "contained" : "outlined"}
+            startIcon={<FilterIcon />}
+            size="small"
+            onClick={onToggleFilterBar}
+            sx={{
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "0.875rem",
+              color: hasActiveFilters ? "white" : "#D97706",
+              borderColor: hasActiveFilters ? "#8B5CF6" : "#F59E0B",
+              bgcolor: hasActiveFilters ? "#8B5CF6" : "#FFFBEB",
+              px: 2.5,
+              py: 0.75,
+              borderRadius: 2,
+              minWidth: "auto",
+              position: "relative",
+              "&:hover": {
+                borderColor: hasActiveFilters ? "#7C3AED" : "#D97706",
+                bgcolor: hasActiveFilters ? "#7C3AED" : "#FEF3C7",
+              },
+            }}
+          >
+            Filter
+            {hasActiveFilters && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: -4,
+                  right: -4,
+                  width: 8,
+                  height: 8,
+                  bgcolor: "#EF4444",
+                  borderRadius: "50%",
+                  border: "1px solid white",
+                }}
+              />
+            )}
+          </Button>
+
+          <Button
+            variant="outlined"
+            startIcon={<CalendarIcon />}
             size="small"
             sx={{
               textTransform: "none",
               fontWeight: 500,
               fontSize: "0.875rem",
-              bgcolor: "#8B5CF6",
-              color: "white",
-              px: 2,
+              color: "#D97706",
+              borderColor: "#F59E0B",
+              bgcolor: "#FFFBEB",
+              px: 2.5,
               py: 0.75,
               borderRadius: 2,
-              boxShadow: "none",
+              minWidth: "auto",
               "&:hover": {
-                bgcolor: "#7C3AED",
-                boxShadow: "none",
+                borderColor: "#D97706",
+                bgcolor: "#FEF3C7",
               },
             }}
           >
-            Invite
+            Today
           </Button>
-
-          {/* Action Buttons */}
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Button
             variant="outlined"
             startIcon={<ShareIcon />}
@@ -255,57 +335,6 @@ const PageHeader = () => {
             <MoreVertIcon sx={{ fontSize: 18 }} />
           </IconButton>
         </Box>
-      </Box>
-
-      {/* Second Row - Filter and Today Buttons */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Button
-          variant="outlined"
-          startIcon={<FilterIcon />}
-          size="small"
-          sx={{
-            textTransform: "none",
-            fontWeight: 500,
-            fontSize: "0.875rem",
-            color: "#D97706",
-            borderColor: "#F59E0B",
-            bgcolor: "#FFFBEB",
-            px: 2.5,
-            py: 0.75,
-            borderRadius: 2,
-            minWidth: "auto",
-            "&:hover": {
-              borderColor: "#D97706",
-              bgcolor: "#FEF3C7",
-            },
-          }}
-        >
-          Filter
-        </Button>
-
-        <Button
-          variant="outlined"
-          startIcon={<CalendarIcon />}
-          size="small"
-          sx={{
-            textTransform: "none",
-            fontWeight: 500,
-            fontSize: "0.875rem",
-            color: "#D97706",
-            borderColor: "#F59E0B",
-            bgcolor: "#FFFBEB",
-            px: 2.5,
-            py: 0.75,
-            borderRadius: 2,
-            minWidth: "auto",
-            "&:hover": {
-              borderColor: "#D97706",
-              bgcolor: "#FEF3C7",
-            },
-          }}
-        >
-          Today
-        </Button>
       </Box>
     </Box>
   );
