@@ -11,9 +11,6 @@ import {
   Typography,
   IconButton,
   Divider,
-  useTheme,
-  useMediaQuery,
-  Chip,
   Tooltip,
 } from "@mui/material";
 import {
@@ -22,11 +19,9 @@ import {
   Assignment as TaskIcon,
   Group as GroupIcon,
   Settings as SettingsIcon,
-  Menu as MenuIcon,
   FiberManualRecord as DotIcon,
   Add as AddIcon,
   Edit as EditIcon,
-  ArrowBack as ArrowBackIcon,
   KeyboardDoubleArrowLeft as CollapseIcon,
   KeyboardDoubleArrowRight as ExpandIcon,
 } from "@mui/icons-material";
@@ -43,8 +38,6 @@ const Sidebar = ({
   isCollapsed,
   onCollapseChange,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [selectedItem, setSelectedItem] = useState("Tasks");
 
   const dispatch = useDispatch();
@@ -106,7 +99,7 @@ const Sidebar = ({
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  bgcolor: currentProject?.color || "#6366f1",
+
                   borderRadius: 1,
                   px: 1.5,
                   py: 0.5,
@@ -115,17 +108,15 @@ const Sidebar = ({
                 <Typography
                   variant="body2"
                   sx={{
-                    color: "white",
                     fontWeight: 600,
-                    fontSize: "0.875rem",
+                    fontSize: "1.5rem",
                   }}
                 >
-                  {currentProject?.name || "Project M."}
+                  {`Project ${
+                    currentProject?.name.slice(0, 1) || "Project M."
+                  }`}
                 </Typography>
               </Box>
-              {/* <IconButton size="small" sx={{ p: 0.5 }}>
-                <ArrowBackIcon sx={{ fontSize: 18, color: "text.secondary" }} />
-              </IconButton> */}
             </Box>
 
             {/* Toggle Button */}
